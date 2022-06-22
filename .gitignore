@@ -37,3 +37,6 @@ yarn-error.log*
 # storybook
 /stories
 /.storybook
+
+# Env
+.env

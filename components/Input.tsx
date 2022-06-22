@@ -1,7 +1,7 @@
 import React from "react";
 
 type Props = {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   type?: "text" | "password" | "email";
 };
