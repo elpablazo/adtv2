@@ -13,6 +13,7 @@ module.exports = {
         "primary-dark": "#43abd9",
         light: "#EFEFEF",
         decorator: "#F49CC2",
+        "decorator-dark": "#ef6ea6",
         dark: "#1B4332",
         normal: "#213A2F",
       },
