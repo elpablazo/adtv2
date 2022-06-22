@@ -1,13 +1,16 @@
 import Button from "$components/Button";
 import Input from "$components/Input";
-import React, { useState } from "react";
+import React from "react";
 import { User } from "@prisma/client";
 import axios from "axios";
 
 type Props = {};
 
 const Signup = (props: Props) => {
-  const [user, setUser] = React.useState<User>({});
+  const [user, setUser] = React.useState<any>({
+    identifier: "",
+    password: "",
+  });
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
