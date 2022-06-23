@@ -20,7 +20,8 @@ const Select = (props: Props) => {
         <option
           key={option.value}
           value={option.value}
-          defaultChecked={option.default}
+          selected={option.default}
+          disabled={option.default}
         >
           {option.label}
         </option>
