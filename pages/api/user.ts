@@ -1,37 +1,31 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient, User } from "@prisma/client";
+import prisma from "$lib/prisma";
+import { User } from "@prisma/client";
+import { PrismaErrorHandler } from "$lib/handlers";
 
 // Todo: esto debe ser un global para que no se inicialice uno nuevo en cada llamada
-const prisma = new PrismaClient();
-
-type Data = {
-  res?: any;
-  user?: User;
-  name?: string;
-  error?: unknown;
-};
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
+  let resp;
+  // Crear un nuevo usuario
   if (req.method === "POST") {
     const { identifier, password } = req.body;
     try {
-      const user = await prisma.user.create({
+      resp = await prisma.user.create({
         data: {
           identifier,
           password,
         },
       });
-      console.log(user);
-
-      res.status(200).json({ user });
+      res.status(200).json({ resp });
     } catch (error) {
-      console.log(error);
-
-      res.status(500).json({ error });
+      // Todo: Terminar error handler
+      resp = PrismaErrorHandler(error);
+      res.status(resp?.status || 500).json(resp);
     }
   }
 }

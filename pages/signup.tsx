@@ -11,13 +11,29 @@ const Signup = (props: Props) => {
     identifier: "",
     password: "",
   });
+  const [errors, setErrors] = React.useState<any>({});
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors({ ...errors, form: undefined });
     if (user.identifier && user.password) {
-      axios.post("/api/user", user).then((res) => {
-        console.log(res.data);
-      });
+      setLoading(true);
+      setTimeout(() => {
+        axios
+          .post("/api/user", user)
+          .then((res) => {
+            // Todo: esto debe ser un token, no el id de usuario
+            localStorage.setItem("token", res.data.id);
+          })
+          .catch((err) => {
+            if (err.response.status === 409)
+              setErrors({ ...errors, form: "El usuario ya está registrado" });
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }, 500);
     }
   };
 
@@ -38,7 +54,16 @@ const Signup = (props: Props) => {
             placeholder="Password"
             onChange={(e) => setUser({ ...user, password: e.target.value })}
           />
-          <Button primary>Crea tu cuenta</Button>
+          <div className="flex flex-col space-y-4">
+            <Button primary>
+              {loading ? (
+                <i className="bi bi-three-dots animate-pulse text-lg" />
+              ) : (
+                "Crea tu cuenta"
+              )}
+            </Button>
+            {errors.form && <p className="text-red-500">{errors.form}</p>}
+          </div>
         </form>
       </div>
     </div>

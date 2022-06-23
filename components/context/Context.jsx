@@ -1,12 +1,15 @@
-import React, { createContext } from "react";
-import { PrismaClient } from "@prisma/client";
+import React, { createContext, useState } from "react";
 
 const AppContext = createContext();
 
-const Context = ({ children }) => {
-  const prisma = new PrismaClient();
+export const Context = ({ children }) => {
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
-  return <AppContext.provider value={prisma}>{children}</AppContext.provider>;
+  return (
+    <AppContext.provider value={{ token, setToken }}>
+      {children}
+    </AppContext.provider>
+  );
 };
 
 export function useAppContext() {
