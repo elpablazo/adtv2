@@ -3,13 +3,10 @@ import React from "react";
 type Props = {
   nombre: string;
   saldo: number;
-  tipo: "credito" | "debito";
+  tipo: "Credito" | "Debito";
   fechaDeCorte: string;
-  color:
-    | "bg-primary-dark"
-    | "bg-secondary-dark"
-    | "bg-decorator"
-    | "bg-emerald-500";
+  // TODO: Añadir gradientes
+  color: string;
 };
 
 const Tarjeta = (props: Props) => {
@@ -24,10 +21,14 @@ const Tarjeta = (props: Props) => {
     >
       <div className="flex justify-between">
         <p className="font-bold">{props.nombre}</p>
-        <p>{props.tipo === "credito" ? "Crédito" : "Débito"}</p>
+        <p className="italic">
+          {props.tipo === "Credito" ? "Crédito" : "Débito"}
+        </p>
       </div>
 
-      <p className="text-center">{currencyFormatter.format(props.saldo)}</p>
+      <p className="text-center text-lg font-bold">
+        {currencyFormatter.format(props.saldo)}
+      </p>
 
       <p className="text-right">Corte {props.fechaDeCorte}</p>
     </div>

@@ -2,6 +2,7 @@ import Button from "$components/Button";
 import { useAppContext } from "$components/context/Context";
 import Input from "$components/Input";
 import Select from "$components/Select";
+import Tarjetac from "$components/Tarjeta";
 import { Tarjeta } from "@prisma/client";
 import axios from "axios";
 import type { NextPage } from "next";
@@ -10,7 +11,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 const Home: NextPage = () => {
   const [newTarjeta, setNewTarjeta] = useState<any>();
-  const { token } = useAppContext();
+  const { token, colores } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [tarjetas, setTarjetas] = useState<Tarjeta[]>([]);
   const [showAgregarTarjeta, setShowAgregarTarjeta] = useState(false);
@@ -69,14 +70,14 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {tarjetas.map((tarjeta) => (
-        <div
-          className="border-rounded-lg border-2 border-decorator"
+        <Tarjetac
           key={tarjeta.id}
-        >
-          <p>Nombre: {tarjeta.nombre}</p>
-          <p>Tipo: {tarjeta.tipo === "Debito" ? "Débito" : "Crédito"}</p>
-          <p>Saldo: {tarjeta.saldo}</p>
-        </div>
+          nombre={tarjeta.nombre}
+          saldo={tarjeta.saldo}
+          tipo={tarjeta.tipo}
+          fechaDeCorte={tarjeta.fechaDeCorte}
+          color={colores[Math.floor(Math.random() * colores.length)]}
+        />
       ))}
       {showAgregarTarjeta ? (
         <div className="m-auto mx-auto flex flex-col items-center space-y-8">
