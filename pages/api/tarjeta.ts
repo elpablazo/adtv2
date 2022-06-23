@@ -20,7 +20,8 @@ export default async function handler(
   if (request.status === 400) res.status(request.status).json({ ...request });
 
   if (request.method === "POST") {
-    const { nombre, saldo, fechaDeCorte, tipo, usuarioId } = request.body;
+    const { nombre, saldo, fechaDeCorte, tipo, usuarioId, color } =
+      request.body;
 
     console.log(usuarioId, typeof usuarioId);
 
@@ -28,6 +29,7 @@ export default async function handler(
       tarjetas = await prisma.tarjeta.create({
         data: {
           nombre,
+          color,
           saldo: tipo === "credito" ? -saldo : saldo,
           fechaDeCorte,
           tipo: tipo === "credito" ? "Credito" : "Debito",
