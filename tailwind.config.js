@@ -22,6 +22,9 @@ module.exports = {
       regular: "0px 6px 0px 0px",
       pressed: "0px 2px 0px 0px",
     },
+    borderWidth: {
+      1: "1px",
+    },
   },
   plugins: [],
 };
