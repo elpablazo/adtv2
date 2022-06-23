@@ -17,9 +17,10 @@ const Header = (props: Props) => {
       } px-4 py-4`}
     >
       <i className="bi bi-list text-4xl text-decorator lg:hidden"></i>
-      <div className="hidden space-x-4 lg:flex">
+      <div className="space-x-4 lg:flex">
         {token ? (
           <Button
+            id="cerrar-sesion"
             size="sm"
             onClick={() => {
               setToken(undefined);
@@ -31,10 +32,19 @@ const Header = (props: Props) => {
           </Button>
         ) : (
           <React.Fragment>
-            <Button size="sm" onClick={() => router.push("/signup")} primary>
+            <Button
+              id="crear-cuenta"
+              size="sm"
+              onClick={() => router.push("/signup")}
+              primary
+            >
               Crear cuenta
             </Button>
-            <Button size="sm" onClick={() => router.push("/")}>
+            <Button
+              id="iniciar-sesion"
+              size="sm"
+              onClick={() => router.push("/")}
+            >
               Iniciar sesión
             </Button>
           </React.Fragment>

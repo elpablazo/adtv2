@@ -8,12 +8,15 @@ type Props = {
     label: string | number;
     default?: boolean;
   }[];
+  id: string;
 };
 
 const Select = (props: Props) => {
   return (
     <select
+      id={props.id}
       onChange={props.onChange}
+      placeholder="Selecciona una opción"
       className="rounded-xl border-2 border-secondary bg-white py-2 px-4 text-normal focus:border-primary focus:outline-none"
     >
       {props.options.map((option) => (

@@ -49,16 +49,18 @@ const Signup = (props: Props) => {
           onSubmit={submitHandler}
         >
           <Input
+            id="identifier"
             placeholder="Correo o Teléfono"
             onChange={(e) => setUser({ ...user, identifier: e.target.value })}
           />
           <Input
+            id="password"
             type="password"
             placeholder="Password"
             onChange={(e) => setUser({ ...user, password: e.target.value })}
           />
           <div className="flex flex-col space-y-4">
-            <Button primary>
+            <Button id="crear" primary>
               {loading ? (
                 <i className="bi bi-three-dots animate-pulse text-lg" />
               ) : (

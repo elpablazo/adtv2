@@ -9,7 +9,8 @@
     "lint": "next lint",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "test": "jest --watch --verbose"
+    "test": "jest --watch --verbose",
+    "cypress": "cypress open"
   },
   "dependencies": {
     "@prisma/client": "^3.15.2",
@@ -41,6 +42,7 @@
     "@types/react-dom": "18.0.5",
     "autoprefixer": "^10.4.7",
     "babel-loader": "^8.2.5",
+    "cypress": "^10.2.0",
     "eslint": "8.18.0",
     "eslint-config-next": "12.1.6",
     "eslint-plugin-storybook": "^0.5.12",

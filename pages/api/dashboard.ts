@@ -1,8 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "$lib/prisma";
-import { User } from "@prisma/client";
-import { PrismaErrorHandler } from "$lib/handlers";
+import { PrismaErrorHandler, RequestHandler } from "$lib/handlers";
 
 // Todo: esto debe ser un global para que no se inicialice uno nuevo en cada llamada
 
@@ -11,20 +10,20 @@ export default async function handler(
   res: NextApiResponse
 ) {
   let resp;
-  // Crear un nuevo usuario
-  if (req.method === "POST") {
-    const { id } = req.body;
-    try {
-      resp = await prisma.user.findUnique({
-        where: {
-          id,
-        },
-      });
-      res.status(200).json({ ...resp });
-    } catch (error) {
-      // Todo: Terminar error handler
-      resp = PrismaErrorHandler(error);
-      res.status(resp?.status || 500).json(resp);
-    }
+  let tarjetas;
+  const request = RequestHandler(req, [{ name: "id", type: "string" }]);
+  if (request.status === 400) res.status(request.status).json({ ...request });
+  const { id } = request.body;
+
+  try {
+    tarjetas = await prisma.tarjeta.findMany({
+      where: {
+        usuarioId: id,
+      },
+    });
+  } catch (error) {
+    // Todo: Terminar error handler
+    resp = PrismaErrorHandler(error);
+    res.status(resp?.status || 500).json(resp);
   }
 }

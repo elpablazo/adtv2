@@ -21,7 +21,7 @@ export default async function handler(
           password,
         },
       });
-      res.status(200).json({ ...resp });
+      res.status(201).json({ ...resp });
     } catch (error) {
       // Todo: Terminar error handler
       resp = PrismaErrorHandler(error);

@@ -53,11 +53,12 @@ export const RequestHandler = (
         );
     });
 
-    return {
-      status: 400,
-      message: "Parámetros de tipo incorrecto.",
-      parameters: wrong,
-    };
+    if (wrong.length > 0)
+      return {
+        status: 400,
+        message: "Parámetros de tipo incorrecto.",
+        parameters: wrong,
+      };
   }
 
   return req;

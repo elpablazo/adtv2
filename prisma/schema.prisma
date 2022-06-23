@@ -32,19 +32,19 @@ model Tarjeta {
   fechaDeCorte       String
   fechaDeVencimiento String?
   tipo               TipoTarjeta
-  usuario            User        @relation(fields: [usuarioId], references: [id])
   usuarioId          String
   credito            Credito?
   debito             Debito?
   createdAt          DateTime    @default(now())
+  usuario            User?       @relation(fields: [usuarioId], references: [id])
 }
 
 model Credito {
-  lineaDeCredito Float
-  tasaDeInteres  Float
-  anualidad      Float
-  tarjeta        Tarjeta @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
-  tarjetaId      String  @unique
+  limiteDeCredito Float
+  tasaDeInteres   Float
+  anualidad       Float?
+  tarjeta         Tarjeta @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
+  tarjetaId       String  @unique
 }
 
 model Debito {
