@@ -22,7 +22,7 @@ export const PrismaErrorHandler = (e: any) => {
 export const RequestHandler = (
   req: NextApiRequest,
   parameters: Parameter[]
-) => {
+): any => {
   // Si no hay método
   if (!req.method) return { status: 405, message: "No hay un método." };
 
