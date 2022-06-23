@@ -1,14 +1,29 @@
-import React, { createContext, useState } from "react";
+import React, { useState, useEffect, createContext } from "react";
 
 const AppContext = createContext();
 
-export const Context = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+const Context = ({ children }) => {
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setToken(token);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem("token", token);
+    } else {
+      localStorage.removeItem("token");
+    }
+  }, [token]);
 
   return (
-    <AppContext.provider value={{ token, setToken }}>
+    <AppContext.Provider value={{ token, setToken }}>
       {children}
-    </AppContext.provider>
+    </AppContext.Provider>
   );
 };
 
@@ -16,4 +31,4 @@ export function useAppContext() {
   return React.useContext(AppContext);
 }
 
-export default AppContext;
+export default Context;

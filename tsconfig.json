@@ -20,6 +20,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "__tests__/requesthandler.test.js", "lib/prisma.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "__tests__/requesthandler.test.js", "lib/prisma.ts", "components/context/Context.jsx"],
   "exclude": ["node_modules"]
 }

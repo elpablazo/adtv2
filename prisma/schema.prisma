@@ -10,8 +10,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TipoTarjeta {
+  Credito
+  Debito
+}
+
 model User {
-  id         String @id @default(cuid())
-  identifier String @unique
+  id         String    @id @default(cuid())
+  identifier String    @unique
   password   String
+  tarjetas   Tarjeta[]
+  createdAt  DateTime  @default(now())
+}
+
+model Tarjeta {
+  id                 String      @id @default(cuid())
+  nombre             String
+  saldo              Float
+  numero             String?
+  cvv                String?
+  fechaDeCorte       String
+  fechaDeVencimiento String?
+  tipo               TipoTarjeta
+  usuario            User        @relation(fields: [usuarioId], references: [id])
+  usuarioId          String
+  credito            Credito?
+  debito             Debito?
+  createdAt          DateTime    @default(now())
+}
+
+model Credito {
+  lineaDeCredito Float
+  tasaDeInteres  Float
+  anualidad      Float
+  tarjeta        Tarjeta @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
+  tarjetaId      String  @unique
+}
+
+model Debito {
+  tarjeta   Tarjeta @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
+  tarjetaId String  @unique
 }

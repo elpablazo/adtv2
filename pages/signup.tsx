@@ -1,8 +1,9 @@
 import Button from "$components/Button";
 import Input from "$components/Input";
 import React from "react";
-import { User } from "@prisma/client";
 import axios from "axios";
+import { useAppContext } from "$components/context/Context";
+import Router from "next/router";
 
 type Props = {};
 
@@ -13,6 +14,7 @@ const Signup = (props: Props) => {
   });
   const [errors, setErrors] = React.useState<any>({});
   const [loading, setLoading] = React.useState<boolean>(false);
+  const { setToken } = useAppContext();
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,7 +26,8 @@ const Signup = (props: Props) => {
           .post("/api/user", user)
           .then((res) => {
             // Todo: esto debe ser un token, no el id de usuario
-            localStorage.setItem("token", res.data.id);
+            setToken(res.data.id);
+            Router.push("/");
           })
           .catch((err) => {
             if (err.response.status === 409)

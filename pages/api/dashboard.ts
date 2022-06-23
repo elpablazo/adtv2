@@ -13,12 +13,11 @@ export default async function handler(
   let resp;
   // Crear un nuevo usuario
   if (req.method === "POST") {
-    const { identifier, password } = req.body;
+    const { id } = req.body;
     try {
-      resp = await prisma.user.create({
-        data: {
-          identifier,
-          password,
+      resp = await prisma.user.findUnique({
+        where: {
+          id,
         },
       });
       res.status(200).json({ ...resp });
