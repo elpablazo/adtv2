@@ -17,7 +17,7 @@ const Tarjeta = (props: Props) => {
   });
   return (
     <div
-      className={`h-40 max-w-xs grow space-y-2 rounded-xl border-1 border-slate-300 drop-shadow-lg ${props.color} flex flex-col justify-between px-6 py-4 text-white`}
+      className={`h-40 w-auto max-w-xs grow space-y-2 rounded-xl border-1 border-slate-300 drop-shadow-lg ${props.color} flex flex-col justify-between px-6 py-4 text-white`}
     >
       <div className="flex justify-between">
         <p className="font-bold">{props.nombre}</p>
