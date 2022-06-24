@@ -19,6 +19,7 @@ type Props = {
 };
 
 const PageTarjeta: NextPage = (props: Props) => {
+  const [showAgregarTransaccion, setShowAgregarTransaccion] = useState(false);
   const [transacciones, setTransacciones] = useState(props.transacciones);
   const date = new Date().toISOString().split("T")[0];
 
@@ -50,112 +51,144 @@ const PageTarjeta: NextPage = (props: Props) => {
         {currencyFormatter.format(props.tarjeta.saldo)}
       </h3>
 
-      <Formik
-        initialValues={{
-          fecha: date,
-          categoria: "",
-          concepto: "",
-          monto: "",
-          tipoDeTransaccion: "",
-        }}
-        validationSchema={Yup.object({
-          fecha: Yup.string().required("Llena este campo"),
-          categoria: Yup.string().required("Llena este campo"),
-          // TODO: Validación numérica
-          monto: Yup.string().required("Llena este campo"),
-          tipoDeTransaccion: Yup.string().required("Selecciona una opción"),
-        })}
-        onSubmit={(values: any, { setSubmitting }: any) => {
-          setTimeout(() => {
-            axios
-              .post("/api/transaccion", {
-                fecha: new Date(values.fecha),
-                categoria: values.categoria,
-                concepto: values.concepto,
-                monto: parseFloat(
-                  values.tipoDeTransaccion === "ingreso"
-                    ? values.monto
-                    : -values.monto
-                ),
-                tarjeta: props.idTarjeta,
-              })
-              .then((res) => {
-                console.log(res.data);
-                setTransacciones(res.data);
-              });
-            setSubmitting(false);
-          }, 500);
-        }}
-      >
-        {({ isSubmitting, errors }) => {
-          return (
-            <Form className="border-rounded-lg flex flex-wrap justify-center space-x-4 space-y-4 border-2 border-decorator py-4 px-4 text-center">
-              <h2 className="text-center text-xl text-dark">
-                Añade una transacción
-              </h2>
-              <div className="grow">
-                <Input name="fecha" label="Fecha" type="date" required />
-              </div>
-              <div className="grow">
-                <Input
-                  name="categoria"
-                  label="Categoría"
-                  type="text"
-                  placeholder="Supermercado"
-                  required
-                />
-              </div>
-              <div className="grow">
-                <Input
-                  name="concepto"
-                  label="Concepto"
-                  type="text"
-                  placeholder="SORIANAMEX 452457"
-                />
-              </div>
-              <div className="grow">
-                <Input name="monto" label="Monto" type="text" required />
-              </div>
-              <div className="flex w-full flex-col space-y-4">
-                <label className="pl-4 text-left text-dark">
-                  Tipo de transacción
-                </label>
-                <div
-                  className="flex w-full grow flex-row justify-around md:flex-col"
-                  role="group"
-                >
-                  <Radio
-                    content="Gasto"
-                    name="tipoDeTransaccion"
-                    value="gasto"
-                    id="transaccion-gasto"
-                  />
-                  <Radio
-                    content="Ingreso"
-                    name="tipoDeTransaccion"
-                    value="ingreso"
-                    id="transaccion-ingreso"
-                  />
-                </div>
-                {errors.tipoDeTransaccion && (
-                  <div className="text-sm text-red-500">
-                    {errors.tipoDeTransaccion}
-                  </div>
-                )}
-              </div>
-              <div className="flex w-full grow pt-6 pb-4 md:pt-0">
-                <Button className="w-max grow" type="submit" primary>
-                  {isSubmitting ? (
-                    <i className="bi bi-three-dots animate-pulse text-lg"></i>
-                  ) : (
-                    "Añadir"
-                  )}
-                </Button>
-              </div>
-            </Form>
-          );
-        }}
-      </Formik>
+      {showAgregarTransaccion && (
+        <div className="sticky z-10 h-full w-full bg-opacity-50">
+          <div
+            className="fixed inset-0 mx-auto my-auto  h-min w-5/6 overflow-y-auto rounded-lg bg-white drop-shadow-xl"
+            id="my-modal"
+          >
+            <div className="relative mx-auto flex w-full flex-col items-center justify-center p-16 lg:p-24">
+              <i
+                className="bi bi-x-square-fill absolute top-4 left-4 cursor-pointer text-red-300 transition-all hover:text-red-500"
+                onClick={() => setShowAgregarTransaccion(false)}
+              ></i>
+              <Formik
+                initialValues={{
+                  fecha: date,
+                  categoria: "",
+                  concepto: "",
+                  monto: "",
+                  tipoDeTransaccion: "",
+                }}
+                validationSchema={Yup.object({
+                  fecha: Yup.string().required("Llena este campo"),
+                  categoria: Yup.string().required("Llena este campo"),
+                  // TODO: Validación numérica
+                  monto: Yup.string().required("Llena este campo"),
+                  tipoDeTransaccion: Yup.string().required(
+                    "Selecciona una opción"
+                  ),
+                })}
+                onSubmit={(values: any, { setSubmitting }: any) => {
+                  setTimeout(() => {
+                    axios
+                      .post("/api/transaccion", {
+                        fecha: new Date(values.fecha),
+                        categoria: values.categoria,
+                        concepto: values.concepto,
+                        monto: parseFloat(
+                          values.tipoDeTransaccion === "ingreso"
+                            ? values.monto
+                            : -values.monto
+                        ),
+                        tarjeta: props.idTarjeta,
+                      })
+                      .then((res) => {
+                        console.log(res.data);
+                        setTransacciones(res.data);
+                        setShowAgregarTransaccion(false);
+                      });
+                    setSubmitting(false);
+                  }, 500);
+                }}
+              >
+                {({ isSubmitting, errors }) => {
+                  return (
+                    <Form className="border-rounded-lg flex w-full flex-col justify-center space-x-4 space-y-4 border-2 border-decorator py-4 px-4 text-center">
+                      <h2 className="text-center text-xl text-dark">
+                        Añade una transacción
+                      </h2>
+                      <div className="grow">
+                        <Input
+                          name="fecha"
+                          label="Fecha"
+                          type="date"
+                          required
+                        />
+                      </div>
+                      <div className="grow">
+                        <Input
+                          name="categoria"
+                          label="Categoría"
+                          type="text"
+                          placeholder="Supermercado"
+                          required
+                        />
+                      </div>
+                      <div className="grow">
+                        <Input
+                          name="concepto"
+                          label="Concepto"
+                          type="text"
+                          placeholder="SORIANAMEX 452457"
+                        />
+                      </div>
+                      <div className="grow">
+                        <Input
+                          name="monto"
+                          label="Monto"
+                          type="text"
+                          required
+                        />
+                      </div>
+                      <div className="flex w-full flex-col space-y-4">
+                        <label className="pl-4 text-left text-dark">
+                          Tipo de transacción
+                        </label>
+                        <div
+                          className="flex w-full grow flex-row justify-around pb-4"
+                          role="group"
+                        >
+                          <Radio
+                            content="Gasto"
+                            name="tipoDeTransaccion"
+                            value="gasto"
+                            id="transaccion-gasto"
+                          />
+                          <Radio
+                            content="Ingreso"
+                            name="tipoDeTransaccion"
+                            value="ingreso"
+                            id="transaccion-ingreso"
+                          />
+                        </div>
+                        {errors.tipoDeTransaccion && (
+                          <div className="text-sm text-red-500">
+                            {errors.tipoDeTransaccion}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex w-full grow pt-6 pb-4 pr-4 md:pt-0">
+                        <Button className="w-max grow" type="submit" primary>
+                          {isSubmitting ? (
+                            <i className="bi bi-three-dots animate-pulse text-lg"></i>
+                          ) : (
+                            "Añadir"
+                          )}
+                        </Button>
+                      </div>
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Button type="button" onClick={() => setShowAgregarTransaccion(true)}>
+        Agrega una nueva transacción
+      </Button>
 
       <div className="table w-full pt-8 text-center">
         <div className="table-header-group">

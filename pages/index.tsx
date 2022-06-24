@@ -25,14 +25,6 @@ const Home: NextPage = () => {
     });
   }, []);
 
-  useEffect(() => {
-    if (tarjetas.length === 0) {
-      setShowAgregarTarjeta(true);
-    } else {
-      setShowAgregarTarjeta(false);
-    }
-  }, [tarjetas]);
-
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -55,6 +47,7 @@ const Home: NextPage = () => {
           setTarjetas([...tarjetas, res.data]);
           process.env.NODE_ENV !== "production" &&
             localStorage.setItem("idTarjeta", res.data.id);
+          setShowAgregarTarjeta(false);
         })
         .catch((err) => {
           console.log(err.response.data);
@@ -95,8 +88,8 @@ const Home: NextPage = () => {
           </Link>
         ))}
       </div>
-      {showAgregarTarjeta ? (
-        <div className="fixed z-10 h-full w-full bg-slate-200 bg-opacity-50">
+      {showAgregarTarjeta && (
+        <div className="sticky z-10 h-full w-full bg-opacity-50">
           <div
             className="fixed inset-0 mx-auto my-auto  h-min w-5/6 overflow-y-auto rounded-lg bg-white drop-shadow-xl"
             id="my-modal"
@@ -231,13 +224,12 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-      ) : (
-        tarjetas.length === 0 && (
-          <h1>
-            Aún no tienes ninguna tarjeta... puedes agregarla haciendo click en
-            el botón de abajo.
-          </h1>
-        )
+      )}
+      {tarjetas.length === 0 && (
+        <h1>
+          Aún no tienes ninguna tarjeta... puedes agregarla haciendo click en el
+          botón de abajo.
+        </h1>
       )}
       <div className="w-auto">
         <Button
