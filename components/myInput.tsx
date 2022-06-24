@@ -8,7 +8,6 @@ type Props = {
   name: string;
   type: "text" | "password" | "email";
   placeholder?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const Input = ({ label, ...props }: Props) => {
