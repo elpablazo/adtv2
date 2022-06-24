@@ -21,6 +21,7 @@ const Header = (props: Props) => {
       <div className="space-x-4 lg:flex">
         {token ? (
           <Button
+            type="button"
             id="cerrar-sesion"
             size="sm"
             onClick={() => {
@@ -34,12 +35,12 @@ const Header = (props: Props) => {
         ) : (
           <React.Fragment>
             <Link href="/signup">
-              <Button id="crear-cuenta" size="sm" primary>
+              <Button type="button" id="crear-cuenta" size="sm" primary>
                 Crear cuenta
               </Button>
             </Link>
             <Link href="/login">
-              <Button id="iniciar-sesion" size="sm">
+              <Button type="button" id="iniciar-sesion" size="sm">
                 Iniciar sesión
               </Button>
             </Link>
