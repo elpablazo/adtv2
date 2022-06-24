@@ -24,7 +24,7 @@ model User {
 }
 
 model Tarjeta {
-  id                 String      @id @default(cuid())
+  id                 String        @id @default(cuid())
   color              String
   nombre             String
   saldo              Float
@@ -36,8 +36,9 @@ model Tarjeta {
   usuarioId          String
   credito            Credito?
   debito             Debito?
-  createdAt          DateTime    @default(now())
-  usuario            User?       @relation(fields: [usuarioId], references: [id])
+  createdAt          DateTime      @default(now())
+  usuario            User?         @relation(fields: [usuarioId], references: [id])
+  transacciones      Transaccion[]
 }
 
 model Credito {
@@ -51,4 +52,15 @@ model Credito {
 model Debito {
   tarjeta   Tarjeta @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
   tarjetaId String  @unique
+}
+
+model Transaccion {
+  id           String   @id @default(cuid())
+  fecha        DateTime @default(now())
+  monto        Float
+  categoria    String
+  subcategoria String?
+  concepto     String?
+  tarjeta      Tarjeta  @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
+  tarjetaId    String
 }
