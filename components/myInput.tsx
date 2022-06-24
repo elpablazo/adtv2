@@ -28,12 +28,16 @@ const Input = ({ label, ...props }: Props) => {
       <div className="flex flex-col space-y-1">
         <Field
           className="rounded-xl border-2 border-secondary py-2 px-4 text-normal focus:border-primary focus:outline-none"
+          id={props.id || props.name}
           {...field}
           {...props}
         />
 
         {meta.touched && meta.error ? (
-          <div className="pl-4 text-left text-sm text-red-500">
+          <div
+            className="pl-4 text-left text-sm text-red-500"
+            id={`error-${props.id || props.name}`}
+          >
             {meta.error}
           </div>
         ) : null}
