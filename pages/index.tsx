@@ -219,7 +219,7 @@ const Home: NextPage = () => {
                       });
                     }}
                   />
-                  <Button id="agregar-tarjeta" primary>
+                  <Button id="agregar-tarjeta" type="submit" primary>
                     {isLoading ? (
                       <i className="bi bi-three-dots animate-pulse text-lg"></i>
                     ) : (
@@ -243,6 +243,7 @@ const Home: NextPage = () => {
         <Button
           id="agregar-nueva-tarjeta"
           onClick={() => setShowAgregarTarjeta(true)}
+          type="button"
         >
           Agregar una nueva tarjeta
         </Button>

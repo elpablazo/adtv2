@@ -80,7 +80,12 @@ const Login: NextPage = (props: Props) => {
                     {loginError}
                   </p>
                 )}
-                <Button id="entrar-a-cuenta" className="grow" primary>
+                <Button
+                  id="entrar-a-cuenta"
+                  className="grow"
+                  type="submit"
+                  primary
+                >
                   {isLoading ? (
                     <i className="bi bi-three-dots animate-pulse text-lg"></i>
                   ) : (

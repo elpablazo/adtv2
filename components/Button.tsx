@@ -8,6 +8,7 @@ type Props = {
   disabled?: boolean;
   id?: string;
   className?: string;
+  type: "button" | "submit" | "reset";
 };
 
 const Button = (props: Props) => {
@@ -57,6 +58,7 @@ const Button = (props: Props) => {
         onClick={props.onClick}
         className={`relative -mt-1 rounded-xl border-2 border-primary bg-primary ${paddingSize} font-bold capitalize text-white shadow-regular shadow-primary-dark transition-all hover:border-primary-dark hover:bg-white hover:text-primary active:top-1 active:shadow-pressed ${textSize} ${props.className}`}
         disabled={props.disabled || false}
+        type={props.type}
       >
         {props.children}
       </button>
@@ -74,6 +76,7 @@ const Button = (props: Props) => {
       onClick={props.onClick}
       className={`relative -mt-1 rounded-xl border-2 border-secondary bg-secondary ${paddingSize} font-bold capitalize text-white shadow-regular shadow-secondary-dark transition-all hover:border-secondary-dark hover:bg-white hover:text-secondary active:top-1 active:shadow-pressed ${textSize} ${props.className}`}
       disabled={props.disabled || false}
+      type={props.type}
     >
       {props.children}
     </button>

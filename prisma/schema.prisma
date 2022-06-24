@@ -61,6 +61,6 @@ model Transaccion {
   categoria    String
   subcategoria String?
   concepto     String?
-  tarjeta      Tarjeta  @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
+  tarjeta      Tarjeta? @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
   tarjetaId    String
 }
