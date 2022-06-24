@@ -47,7 +47,8 @@ const Home: NextPage = () => {
         .post("/api/tarjeta", tarjeta)
         .then((res) => {
           setTarjetas([...tarjetas, res.data]);
-          localStorage.setItem("idTarjeta", res.data.id);
+          process.env.NODE_ENV !== "production" &&
+            localStorage.setItem("idTarjeta", res.data.id);
         })
         .catch((err) => {
           console.log(err.response.data);
