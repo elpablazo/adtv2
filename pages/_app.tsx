@@ -7,10 +7,8 @@ import Context from "$components/context/Context";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Context>
-      <div className="">
-        <Header />
-        <Component {...pageProps} />
-      </div>
+      <Header />
+      <Component {...pageProps} />
     </Context>
   );
 }
