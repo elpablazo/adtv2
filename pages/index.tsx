@@ -20,6 +20,12 @@ const Home: NextPage = () => {
   const [balanceTotal, setBalanceTotal] = useState(0);
 
   useEffect(() => {
+    axios.get("/api/tarjeta").then((res) => {
+      setTarjetas(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
     if (tarjetas.length === 0) {
       setShowAgregarTarjeta(true);
     } else {
