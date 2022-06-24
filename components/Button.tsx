@@ -7,6 +7,7 @@ type Props = {
   size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
   disabled?: boolean;
   id?: string;
+  className?: string;
 };
 
 const Button = (props: Props) => {
@@ -54,7 +55,7 @@ const Button = (props: Props) => {
       <button
         id={props.id}
         onClick={props.onClick}
-        className={`relative -mt-1 rounded-xl border-2 border-primary bg-primary ${paddingSize} font-bold capitalize text-white shadow-regular shadow-primary-dark transition-all hover:border-primary-dark hover:bg-white hover:text-primary active:top-1 active:shadow-pressed ${textSize}`}
+        className={`relative -mt-1 rounded-xl border-2 border-primary bg-primary ${paddingSize} font-bold capitalize text-white shadow-regular shadow-primary-dark transition-all hover:border-primary-dark hover:bg-white hover:text-primary active:top-1 active:shadow-pressed ${textSize} ${props.className}`}
         disabled={props.disabled || false}
       >
         {props.children}
@@ -71,7 +72,7 @@ const Button = (props: Props) => {
     <button
       id={props.id}
       onClick={props.onClick}
-      className={`relative -mt-1 rounded-xl border-2 border-secondary bg-secondary ${paddingSize} font-bold capitalize text-white shadow-regular shadow-secondary-dark transition-all hover:border-secondary-dark hover:bg-white hover:text-secondary active:top-1 active:shadow-pressed ${textSize}`}
+      className={`relative -mt-1 rounded-xl border-2 border-secondary bg-secondary ${paddingSize} font-bold capitalize text-white shadow-regular shadow-secondary-dark transition-all hover:border-secondary-dark hover:bg-white hover:text-secondary active:top-1 active:shadow-pressed ${textSize} ${props.className}`}
       disabled={props.disabled || false}
     >
       {props.children}
