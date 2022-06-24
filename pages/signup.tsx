@@ -60,7 +60,7 @@ const Signup = (props: Props) => {
             onChange={(e) => setUser({ ...user, password: e.target.value })}
           />
           <div className="flex flex-col space-y-4">
-            <Button id="crear" primary>
+            <Button type="submit" id="crear" primary>
               {loading ? (
                 <i className="bi bi-three-dots animate-pulse text-lg" />
               ) : (
