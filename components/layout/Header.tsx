@@ -3,6 +3,7 @@ import gsap from "gsap";
 import Button from "$components/Button";
 import { useRouter } from "next/router";
 import { useAppContext } from "$components/context/Context";
+import Link from "next/link";
 
 type Props = {};
 
@@ -32,21 +33,16 @@ const Header = (props: Props) => {
           </Button>
         ) : (
           <React.Fragment>
-            <Button
-              id="crear-cuenta"
-              size="sm"
-              onClick={() => router.push("/signup")}
-              primary
-            >
-              Crear cuenta
-            </Button>
-            <Button
-              id="iniciar-sesion"
-              size="sm"
-              onClick={() => router.push("/")}
-            >
-              Iniciar sesión
-            </Button>
+            <Link href="/signup">
+              <Button id="crear-cuenta" size="sm" primary>
+                Crear cuenta
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button id="iniciar-sesion" size="sm">
+                Iniciar sesión
+              </Button>
+            </Link>
           </React.Fragment>
         )}
       </div>
