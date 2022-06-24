@@ -29,7 +29,8 @@ const Login: NextPage = (props: Props) => {
                 .email("El email no es válido")
             : Yup.string()
                 .required("Llena este campo")
-                .matches(/^\d{10}$/, "El número no es válido"),
+                .matches(/^[0-9]*$/, "El número no es válido")
+                .length(10, "El número debe tener 10 dígitos"),
           password: Yup.string().required("Llena este campo"),
         })}
         onSubmit={(values: any, { setSubmitting }: any) => {
