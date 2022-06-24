@@ -80,7 +80,7 @@ const Home: NextPage = () => {
         id="tarjetas"
       >
         {tarjetas.map((tarjeta) => (
-          <Link href={`/tarjeta/${tarjeta.id}`}>
+          <Link href={`/tarjeta/${tarjeta.id}`} key={tarjeta.id}>
             <a>
               <Tarjetac
                 key={tarjeta.id}
