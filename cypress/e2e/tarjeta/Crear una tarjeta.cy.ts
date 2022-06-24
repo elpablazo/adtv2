@@ -37,6 +37,9 @@ context("Entrar al dashboard", () => {
 });
 
 context("Crear una tarjeta", () => {
+  it("Abrir modal", () => {
+    cy.get("#agregar-nueva-tarjeta").click();
+  });
   it("Seleccionar tarjeta de crédito", () => {
     cy.get("#tipo").select("Crédito").should("have.value", "credito");
   });
