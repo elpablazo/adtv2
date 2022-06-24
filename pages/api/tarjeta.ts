@@ -11,19 +11,20 @@ export default async function handler(
 ) {
   let resp;
   let tarjetas;
-  const request = RequestHandler(req, [
-    { name: "nombre", type: "string" },
-    { name: "saldo", type: "number" },
-    { name: "fechaDeCorte", type: "string" },
-    { name: "tipo", type: "string" },
-  ]);
-  if (request.status === 400) res.status(request.status).json({ ...request });
 
-  if (request.method === "POST") {
+  if (req.method === "POST") {
+    const request = RequestHandler(req, [
+      { name: "nombre", type: "string" },
+      { name: "saldo", type: "number" },
+      { name: "fechaDeCorte", type: "string" },
+      { name: "tipo", type: "string" },
+    ]);
+    if (request.status === 400) res.status(request.status).json({ ...request });
+
     const { nombre, saldo, fechaDeCorte, tipo, usuarioId, color } =
       request.body;
 
-    console.log(usuarioId, typeof usuarioId);
+    console.log("Id del usuario en tarjeta.ts-----------------> ", usuarioId);
 
     try {
       tarjetas = await prisma.tarjeta.create({
@@ -47,7 +48,6 @@ export default async function handler(
               tarjetaId: tarjetas.id,
             },
           });
-          console.log(tipo);
         } catch (error) {
           console.log(error);
         }
@@ -59,6 +59,22 @@ export default async function handler(
       // resp = PrismaErrorHandler(error);
       res.status(500).json({
         data: "Error al crear la tarjeta",
+      });
+    }
+  } else if (req.method === "GET") {
+    try {
+      tarjetas = await prisma.tarjeta.findMany({
+        where: {
+          usuarioId: req.body.usuarioId,
+        },
+      });
+      console.log("Tarjetas: ", tarjetas);
+
+      res.status(200).send(tarjetas);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        data: "Error al obtener las tarjetas",
       });
     }
   }
