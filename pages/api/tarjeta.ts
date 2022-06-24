@@ -38,6 +38,19 @@ export default async function handler(
         },
       });
 
+      const primeraTransaccion = await prisma.transaccion.create({
+        data: {
+          monto: tipo === "credito" ? -saldo : saldo,
+          categoria: "Creación de tarjeta",
+          tarjetaId: tarjetas.id,
+        },
+      });
+
+      console.log(
+        "La primera transacción es---------------------> ",
+        primeraTransaccion
+      );
+
       // Todo: agregar condicion de tipo de tarjeta de débito
 
       if (tipo === "credito")
@@ -68,7 +81,6 @@ export default async function handler(
           usuarioId: req.body.usuarioId,
         },
       });
-      console.log("Tarjetas: ", tarjetas);
 
       res.status(200).send(tarjetas);
     } catch (error) {
