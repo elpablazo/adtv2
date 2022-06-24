@@ -75,14 +75,17 @@ const Home: NextPage = () => {
       >
         {tarjetas.map((tarjeta) => (
           <Link href={`/tarjeta/${tarjeta.id}`}>
-            <Tarjetac
-              key={tarjeta.id}
-              nombre={tarjeta.nombre}
-              saldo={tarjeta.saldo}
-              tipo={tarjeta.tipo}
-              fechaDeCorte={tarjeta.fechaDeCorte}
-              color={tarjeta.color}
-            />
+            <a>
+              <Tarjetac
+                key={tarjeta.id}
+                nombre={tarjeta.nombre}
+                saldo={tarjeta.saldo}
+                tipo={tarjeta.tipo}
+                fechaDeCorte={tarjeta.fechaDeCorte}
+                color={tarjeta.color}
+                id={tarjeta.id}
+              />
+            </a>
           </Link>
         ))}
       </div>

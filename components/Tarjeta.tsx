@@ -7,6 +7,7 @@ type Props = {
   fechaDeCorte: string;
   // TODO: Añadir gradientes
   color: string;
+  id?: string;
 };
 
 const Tarjeta = (props: Props) => {
@@ -17,6 +18,7 @@ const Tarjeta = (props: Props) => {
   });
   return (
     <div
+      id={props.id}
       className={`h-40 w-auto max-w-xs grow space-y-2 rounded-xl border-1 border-slate-300 drop-shadow-lg ${props.color} flex flex-col justify-between px-6 py-4 text-white`}
     >
       <div className="flex justify-between">

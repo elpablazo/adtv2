@@ -54,6 +54,10 @@ context("Crear una tarjeta", () => {
   it("La tarjeta se agregó", () => {
     cy.get("#tarjetas").contains("Rappicard");
   });
+  it("La página de la tarjeta carga", () => {
+    cy.get("#tarjetas").contains("Rappicard").click();
+    cy.url().should("contain", `http://localhost:3000/tarjeta/`);
+  });
 });
 
 export {};
