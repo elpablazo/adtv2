@@ -8,6 +8,7 @@ import { Tarjeta } from "@prisma/client";
 import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
 
 const Home: NextPage = () => {
@@ -26,10 +27,6 @@ const Home: NextPage = () => {
     }
   }, [tarjetas]);
 
-  useEffect(() => {
-    console.log(showAgregarTarjeta);
-  }, [showAgregarTarjeta]);
-
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -44,18 +41,16 @@ const Home: NextPage = () => {
 
     setNewTarjeta(tarjeta);
 
-    console.log(newTarjeta, tarjeta);
-
     setIsLoading(true);
     setTimeout(() => {
       axios
         .post("/api/tarjeta", tarjeta)
         .then((res) => {
-          console.log(res.data);
           setTarjetas([...tarjetas, res.data]);
+          localStorage.setItem("idTarjeta", res.data.id);
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.response.data);
         })
         .finally(() => {
           setIsLoading(false);
@@ -73,16 +68,21 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <p className="text-center">Tus tarjetas</p>
-      <div className="mx-auto flex items-stretch justify-center space-x-8 overflow-x-auto">
+      <div
+        className="mx-auto flex items-stretch justify-center space-x-8 overflow-x-auto"
+        id="tarjetas"
+      >
         {tarjetas.map((tarjeta) => (
-          <Tarjetac
-            key={tarjeta.id}
-            nombre={tarjeta.nombre}
-            saldo={tarjeta.saldo}
-            tipo={tarjeta.tipo}
-            fechaDeCorte={tarjeta.fechaDeCorte}
-            color={tarjeta.color}
-          />
+          <Link href={`/tarjeta/${tarjeta.id}`}>
+            <Tarjetac
+              key={tarjeta.id}
+              nombre={tarjeta.nombre}
+              saldo={tarjeta.saldo}
+              tipo={tarjeta.tipo}
+              fechaDeCorte={tarjeta.fechaDeCorte}
+              color={tarjeta.color}
+            />
+          </Link>
         ))}
       </div>
       {showAgregarTarjeta ? (
