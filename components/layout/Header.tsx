@@ -25,6 +25,7 @@ const Header = (props: Props) => {
             id="cerrar-sesion"
             size="sm"
             onClick={() => {
+              localStorage.clear();
               setToken(undefined);
               router.push("/");
             }}
