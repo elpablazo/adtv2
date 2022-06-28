@@ -65,6 +65,7 @@ const PageTarjeta: NextPage = (props: Props) => {
                 initialValues={{
                   fecha: date,
                   categoria: "",
+                  subcategoria: "",
                   concepto: "",
                   monto: "",
                   tipoDeTransaccion: "",
@@ -84,6 +85,7 @@ const PageTarjeta: NextPage = (props: Props) => {
                       .post("/api/transaccion", {
                         fecha: new Date(values.fecha),
                         categoria: values.categoria,
+                        subcategoria: values.subcategoria,
                         concepto: values.concepto,
                         monto: parseFloat(
                           values.tipoDeTransaccion === "ingreso"
@@ -119,8 +121,16 @@ const PageTarjeta: NextPage = (props: Props) => {
                           name="categoria"
                           label="Categoría"
                           type="text"
-                          placeholder="Supermercado"
+                          placeholder="Tiendas de conveniencia"
                           required
+                        />
+                      </div>
+                      <div className="grow">
+                        <Input
+                          name="subcategoria"
+                          label="Subcategoría"
+                          type="text"
+                          placeholder="7 Eleven"
                         />
                       </div>
                       <div className="grow">
@@ -128,7 +138,7 @@ const PageTarjeta: NextPage = (props: Props) => {
                           name="concepto"
                           label="Concepto"
                           type="text"
-                          placeholder="SORIANAMEX 452457"
+                          placeholder="Alcohol"
                         />
                       </div>
                       <div className="grow">
@@ -188,7 +198,7 @@ const PageTarjeta: NextPage = (props: Props) => {
         Agrega una nueva transacción
       </Button>
 
-      <div className="space-y-8 rounded-lg border-2 border-decorator px-8 pt-4 pb-8 text-center">
+      <div className="space-y-8 overflow-x-auto rounded-lg border-2 border-decorator px-8 pt-4 pb-8 text-center">
         <h2 className="text-xl text-dark">Transacciones</h2>
         <div className="table w-full">
           <div className="table-header-group">
@@ -200,13 +210,16 @@ const PageTarjeta: NextPage = (props: Props) => {
                 Categoría
               </div>
               <div className="table-cell border-b-2 border-b-slate-800">
+                Subcategoría
+              </div>
+              <div className="table-cell border-b-2 border-b-slate-800">
                 Concepto
               </div>
               <div className="table-cell border-b-2 border-b-slate-800">
                 Monto
               </div>
               <div className="table-cell border-b-2 border-b-slate-800">
-                Eliminar
+                {"  "}
               </div>
             </div>
           </div>
@@ -221,17 +234,20 @@ const PageTarjeta: NextPage = (props: Props) => {
                     {String(new Date(transaccion.fecha).toLocaleDateString())}
                   </div>
                   <div className="table-cell">{transaccion.categoria}</div>
-                  <div className="group table-cell">
-                    {transaccion.concepto}{" "}
-                  </div>
+                  <div className="table-cell">{transaccion.subcategoria}</div>
+                  <div className="table-cell">{transaccion.concepto}</div>
                   <div className="table-cell">
                     {currencyFormatter.format(transaccion.monto)}
                   </div>
                   <div className="table-cell">
-                    <i
-                      className="bi bi-trash cursor-pointer text-red-500 transition-all hover:text-red-800"
-                      onClick={() => handleEliminarTransaccion(transaccion.id)}
-                    ></i>
+                    {transaccion.categoria !== "Creación de tarjeta" && (
+                      <i
+                        className="bi bi-trash cursor-pointer text-red-500 transition-all hover:text-red-800"
+                        onClick={() =>
+                          handleEliminarTransaccion(transaccion.id)
+                        }
+                      ></i>
+                    )}
                   </div>
                 </div>
               ))}

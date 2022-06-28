@@ -9,9 +9,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let resp;
-  let tarjetas;
-
   if (req.method === "POST") {
     // TODO: Añadir campos requeridos
     const request = RequestHandler(req, []);
@@ -62,6 +59,7 @@ export default async function handler(
         data: {
           fecha: new Date(fecha),
           categoria: String(categoria),
+          subcategoria: String(concepto),
           concepto: String(concepto),
           monto: parseFloat(monto),
           tarjetaId: tarjeta,
