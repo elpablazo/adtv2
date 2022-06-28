@@ -20,10 +20,17 @@ const Home: NextPage = () => {
   const [balanceTotal, setBalanceTotal] = useState(0);
 
   useEffect(() => {
-    axios.get("/api/tarjeta").then((res) => {
-      setTarjetas(res.data);
-    });
-  }, []);
+    token &&
+      axios
+        .get("/api/tarjeta", {
+          params: {
+            usuarioId: token,
+          },
+        })
+        .then((res) => {
+          setTarjetas(res.data);
+        });
+  }, [token]);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

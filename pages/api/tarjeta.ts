@@ -9,7 +9,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let resp;
   let tarjetas;
 
   if (req.method === "POST") {
@@ -75,10 +74,12 @@ export default async function handler(
       });
     }
   } else if (req.method === "GET") {
+    const url = new URL(req.url || "", `http://${req.headers.host}`);
+
     try {
       tarjetas = await prisma.tarjeta.findMany({
         where: {
-          usuarioId: req.body.usuarioId,
+          usuarioId: url.searchParams.get("usuarioId") || "",
         },
       });
 
