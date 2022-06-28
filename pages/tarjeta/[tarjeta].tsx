@@ -188,36 +188,54 @@ const PageTarjeta: NextPage = (props: Props) => {
         Agrega una nueva transacción
       </Button>
 
-      <div className="table w-full pt-8 text-center">
-        <div className="table-header-group">
-          <div className="table-row font-bold">
-            <div className="table-cell border-2 border-black">Fecha</div>
-            <div className="table-cell border-2 border-black">Categoria</div>
-            <div className="table-cell border-2 border-black">Concepto</div>
-            <div className="table-cell border-2 border-black">Monto</div>
-            <div className="table-cell border-2 border-black">Eliminar</div>
-          </div>
-        </div>
-        <div className="table-row-group">
-          {transacciones &&
-            transacciones?.map((transaccion) => (
-              <div className="group table-row" key={transaccion.id}>
-                <div className="table-cell">
-                  {String(new Date(transaccion.fecha).toLocaleDateString())}
-                </div>
-                <div className="table-cell">{transaccion.categoria}</div>
-                <div className="group table-cell">{transaccion.concepto} </div>
-                <div className="table-cell">
-                  {currencyFormatter.format(transaccion.monto)}
-                </div>
-                <div className="table-cell">
-                  <i
-                    className="bi bi-trash"
-                    onClick={() => handleEliminarTransaccion(transaccion.id)}
-                  ></i>
-                </div>
+      <div className="space-y-8 rounded-lg border-2 border-decorator px-8 pt-4 pb-8 text-center">
+        <h2 className="text-xl text-dark">Transacciones</h2>
+        <div className="table w-full">
+          <div className="table-header-group">
+            <div className="table-row font-bold">
+              <div className="table-cell border-b-2 border-b-slate-800">
+                Fecha
               </div>
-            ))}
+              <div className="table-cell border-b-2 border-b-slate-800">
+                Categoría
+              </div>
+              <div className="table-cell border-b-2 border-b-slate-800">
+                Concepto
+              </div>
+              <div className="table-cell border-b-2 border-b-slate-800">
+                Monto
+              </div>
+              <div className="table-cell border-b-2 border-b-slate-800">
+                Eliminar
+              </div>
+            </div>
+          </div>
+          <div className="table-row-group">
+            {transacciones &&
+              transacciones?.map((transaccion) => (
+                <div
+                  className="group table-row hover:bg-slate-200"
+                  key={transaccion.id}
+                >
+                  <div className="table-cell">
+                    {String(new Date(transaccion.fecha).toLocaleDateString())}
+                  </div>
+                  <div className="table-cell">{transaccion.categoria}</div>
+                  <div className="group table-cell">
+                    {transaccion.concepto}{" "}
+                  </div>
+                  <div className="table-cell">
+                    {currencyFormatter.format(transaccion.monto)}
+                  </div>
+                  <div className="table-cell">
+                    <i
+                      className="bi bi-trash cursor-pointer text-red-500 transition-all hover:text-red-800"
+                      onClick={() => handleEliminarTransaccion(transaccion.id)}
+                    ></i>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </div>
