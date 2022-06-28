@@ -23,8 +23,6 @@ export default async function handler(
     const { nombre, saldo, fechaDeCorte, tipo, usuarioId, color } =
       request.body;
 
-    console.log("Id del usuario en tarjeta.ts-----------------> ", usuarioId);
-
     try {
       tarjetas = await prisma.tarjeta.create({
         data: {
@@ -44,11 +42,6 @@ export default async function handler(
           tarjetaId: tarjetas.id,
         },
       });
-
-      console.log(
-        "La primera transacción es---------------------> ",
-        primeraTransaccion
-      );
 
       // Todo: agregar condicion de tipo de tarjeta de débito
 

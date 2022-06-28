@@ -32,7 +32,6 @@ const PageTarjeta: NextPage = (props: Props) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setTransacciones(res.data);
       });
   };
@@ -94,7 +93,6 @@ const PageTarjeta: NextPage = (props: Props) => {
                         tarjeta: props.idTarjeta,
                       })
                       .then((res) => {
-                        console.log(res.data);
                         setTransacciones(res.data);
                         setShowAgregarTransaccion(false);
                       });
