@@ -57,6 +57,7 @@ model Debito {
 model Transaccion {
   id           String      @id @default(cuid())
   fecha        DateTime    @default(now())
+  createdAt    DateTime    @default(now())
   monto        Float
   categoria    String
   subcategoria String?
@@ -68,6 +69,7 @@ model Transaccion {
 
 model Fragmento {
   id            String      @id @default(cuid())
+  createdAt     DateTime    @default(now())
   cantidad      Float
   concepto      String
   monto         Float
