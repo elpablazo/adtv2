@@ -55,12 +55,22 @@ model Debito {
 }
 
 model Transaccion {
-  id           String   @id @default(cuid())
-  fecha        DateTime @default(now())
+  id           String      @id @default(cuid())
+  fecha        DateTime    @default(now())
   monto        Float
   categoria    String
   subcategoria String?
   concepto     String?
-  tarjeta      Tarjeta? @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
+  tarjeta      Tarjeta?    @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
   tarjetaId    String
+  fragmentos   Fragmento[]
+}
+
+model Fragmento {
+  id            String      @id @default(cuid())
+  cantidad      Float
+  concepto      String
+  monto         Float
+  transaccion   Transaccion @relation(fields: [transaccionId], references: [id], onDelete: Cascade)
+  transaccionId String
 }
