@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import prisma from "$lib/prisma";
 import { Tarjeta, Transaccion } from "@prisma/client";
@@ -19,6 +19,8 @@ type Props = {
 };
 
 const PageTarjeta: NextPage = (props: Props) => {
+  const [showAgregarFragmento, setShowAgregarFragmento] = useState(false);
+  const [selectedTransaccion, setSelectedTransaccion] = useState<any>();
   const [showAgregarTransaccion, setShowAgregarTransaccion] = useState(false);
   const [transacciones, setTransacciones] = useState(props.transacciones);
   const date = new Date().toISOString().split("T")[0];
@@ -194,6 +196,157 @@ const PageTarjeta: NextPage = (props: Props) => {
         </div>
       )}
 
+      {showAgregarFragmento && (
+        <div className="sticky z-10 h-full w-full bg-opacity-50">
+          <div
+            className="fixed inset-0 mx-auto my-auto  h-min w-5/6 overflow-y-auto rounded-lg bg-white drop-shadow-xl"
+            id="my-modal"
+          >
+            <div className="relative mx-auto flex w-full flex-col items-center justify-center p-16 lg:p-24">
+              <i
+                className="bi bi-x-square-fill absolute top-4 left-4 cursor-pointer text-red-300 transition-all hover:text-red-500"
+                onClick={() => setShowAgregarFragmento(false)}
+              ></i>
+              <Formik
+                initialValues={{
+                  total: String(Math.abs(selectedTransaccion.monto)),
+                  restante: String(Math.abs(selectedTransaccion.monto)),
+                  fragmentos: [
+                    {
+                      cantidad: "1",
+                      concepto: "",
+                      monto: "0",
+                    },
+                  ],
+                }}
+                validationSchema={Yup.object({
+                  fragmentos: Yup.array()
+                    .required("Llena este campo")
+                    .of(
+                      Yup.object().shape({
+                        cantidad: Yup.string()
+                          .required("Llena este campo")
+                          .min(1, "Debe contener al menos uno."),
+                        concepto: Yup.string().required("Llena este campo"),
+                        // Todo: Numeric validation
+                        monto: Yup.string().required("Llena este campo"),
+                      })
+                    ),
+                })}
+                onSubmit={(values: any, { setSubmitting }: any) => {
+                  setTimeout(() => {}, 500);
+                }}
+              >
+                {({ values, isSubmitting, errors }) => {
+                  const restante = values.fragmentos.reduce(
+                    (tot, frag) => parseFloat(frag.monto) + parseFloat(tot),
+                    0
+                  );
+                  if (!restante) {
+                    values.restante = "0";
+                  } else {
+                    values.restante = String(
+                      parseFloat(values.total) - restante
+                    );
+                  }
+                  // Todo: corregir error de typescript en reducer
+                  // Todo: agregar opción de eliminar fragmento
+                  // Todo: que si ya existen fragmentos, se carguen al dividir
+                  return (
+                    <Form className="border-rounded-lg flex w-full flex-col justify-center space-x-4 space-y-4 border-2 border-decorator py-4 px-4 text-center">
+                      <h2 className="text-center text-xl text-dark">
+                        Divide tu transacción
+                      </h2>
+                      <div className="flex justify-between">
+                        <p>
+                          Total:{" "}
+                          <span className="font-bold">
+                            {currencyFormatter.format(parseFloat(values.total))}
+                          </span>
+                        </p>
+                        <p>
+                          Restante:{" "}
+                          <span className="font-bold">
+                            {currencyFormatter.format(
+                              parseFloat(values.restante)
+                            )}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="flex flex-col space-y-4">
+                        {values.fragmentos.map(
+                          (fragmento: any, index: number) => {
+                            return (
+                              <div
+                                className="grid grow grid-cols-1 space-x-4 md:grid-cols-3"
+                                key={index}
+                              >
+                                <Input
+                                  name={`fragmentos.${index}.cantidad`}
+                                  label="Cantidad"
+                                  type="text"
+                                  placeholder="1"
+                                  defaultValue="1"
+                                  required
+                                />
+                                <Input
+                                  name={`fragmentos.${index}.concepto`}
+                                  label="Concepto"
+                                  type="text"
+                                  placeholder="Cebolla blanca"
+                                  required
+                                />
+                                <Input
+                                  name={`fragmentos.${index}.monto`}
+                                  label="Monto"
+                                  type="text"
+                                  placeholder={`152.50`}
+                                  defaultValue={`${fragmento.monto}`}
+                                  required
+                                />
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                      <div className="grid grow grid-cols-1 space-x-4 pt-6 pb-4 md:grid-cols-2 md:pt-0">
+                        <Button
+                          type="submit"
+                          onClick={() =>
+                            values.fragmentos.push({
+                              cantidad: "1",
+                              concepto: "",
+                              monto: "1",
+                            })
+                          }
+                        >
+                          {isSubmitting ? (
+                            <i className="bi bi-three-dots animate-pulse text-lg"></i>
+                          ) : (
+                            "Añadir fragmento"
+                          )}
+                        </Button>
+                        <Button
+                          type="button"
+                          primary
+                          disabled={values.restante !== "0"}
+                        >
+                          {isSubmitting ? (
+                            <i className="bi bi-three-dots animate-pulse text-lg"></i>
+                          ) : (
+                            "Guardar"
+                          )}
+                        </Button>
+                      </div>
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Button type="button" onClick={() => setShowAgregarTransaccion(true)}>
         Agrega una nueva transacción
       </Button>
@@ -227,7 +380,7 @@ const PageTarjeta: NextPage = (props: Props) => {
             {transacciones &&
               transacciones?.map((transaccion) => (
                 <div
-                  className="group table-row hover:bg-slate-200"
+                  className="group table-row hover:bg-slate-100"
                   key={transaccion.id}
                 >
                   <div className="table-cell">
@@ -241,12 +394,23 @@ const PageTarjeta: NextPage = (props: Props) => {
                   </div>
                   <div className="table-cell">
                     {transaccion.categoria !== "Creación de tarjeta" && (
-                      <i
-                        className="bi bi-trash cursor-pointer text-red-500 transition-all hover:text-red-800"
-                        onClick={() =>
-                          handleEliminarTransaccion(transaccion.id)
-                        }
-                      ></i>
+                      <div className="flex w-full">
+                        <i
+                          className="bi bi-hr cursor-pointer text-blue-400 transition-all hover:text-blue-600"
+                          title="Fraccionar transacción"
+                          onClick={() => {
+                            setShowAgregarFragmento(true);
+                            setSelectedTransaccion(transaccion);
+                          }}
+                        ></i>
+                        <i
+                          className="bi bi-trash cursor-pointer text-red-500 transition-all hover:text-red-800"
+                          onClick={() =>
+                            handleEliminarTransaccion(transaccion.id)
+                          }
+                          title="Borrar transacción"
+                        ></i>
+                      </div>
                     )}
                   </div>
                 </div>

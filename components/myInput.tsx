@@ -9,6 +9,7 @@ type Props = {
   type: "text" | "password" | "email" | "date";
   placeholder?: string;
   required?: boolean;
+  defaultValue?: string;
 };
 
 const Input = ({ label, required, ...props }: Props) => {
