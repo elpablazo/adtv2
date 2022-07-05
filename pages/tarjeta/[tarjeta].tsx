@@ -20,6 +20,7 @@ type Props = {
 
 const PageTarjeta: NextPage = (props: Props) => {
   const [showAgregarFragmento, setShowAgregarFragmento] = useState(false);
+  const [fragmentos, setFragmentos] = useState<any>([]);
   const [selectedTransaccion, setSelectedTransaccion] = useState<any>();
   const [showAgregarTransaccion, setShowAgregarTransaccion] = useState(false);
   const [transacciones, setTransacciones] = useState(props.transacciones);
@@ -211,13 +212,16 @@ const PageTarjeta: NextPage = (props: Props) => {
                 initialValues={{
                   total: String(Math.abs(selectedTransaccion.monto)),
                   restante: String(Math.abs(selectedTransaccion.monto)),
-                  fragmentos: [
-                    {
-                      cantidad: "1",
-                      concepto: "",
-                      monto: "0",
-                    },
-                  ],
+                  fragmentos:
+                    fragmentos && fragmentos.length > 0
+                      ? fragmentos
+                      : [
+                          {
+                            cantidad: "1",
+                            concepto: "",
+                            monto: "1",
+                          },
+                        ],
                 }}
                 validationSchema={Yup.object({
                   fragmentos: Yup.array()
@@ -234,12 +238,26 @@ const PageTarjeta: NextPage = (props: Props) => {
                     ),
                 })}
                 onSubmit={(values: any, { setSubmitting }: any) => {
-                  setTimeout(() => {}, 500);
+                  setTimeout(() => {
+                    const { fragmentos } = values;
+                    console.log(values);
+
+                    axios
+                      .post("/api/fragmento", {
+                        fragmentos,
+                        transaccionId: selectedTransaccion.id,
+                      })
+                      .then((res) => {
+                        console.log(res.data);
+                        setSubmitting(false);
+                        setShowAgregarFragmento(false);
+                      });
+                  }, 500);
                 }}
               >
-                {({ values, isSubmitting, errors }) => {
+                {({ values, isSubmitting, setValues }) => {
                   const restante = values.fragmentos.reduce(
-                    (tot, frag) => parseFloat(frag.monto) + parseFloat(tot),
+                    (tot: number, frag: any) => parseFloat(frag.monto) + tot,
                     0
                   );
                   if (!restante) {
@@ -249,9 +267,9 @@ const PageTarjeta: NextPage = (props: Props) => {
                       parseFloat(values.total) - restante
                     );
                   }
-                  // Todo: corregir error de typescript en reducer
+                  // ! Corregir bug que si pones 0 en el monto de un fragmento, el rrestante se hace 0
                   // Todo: agregar opción de eliminar fragmento
-                  // Todo: que si ya existen fragmentos, se carguen al dividir
+                  // Todo: que si ya existen fragmentos, se carguen al abrir el modal
                   return (
                     <Form className="border-rounded-lg flex w-full flex-col justify-center space-x-4 space-y-4 border-2 border-decorator py-4 px-4 text-center">
                       <h2 className="text-center text-xl text-dark">
@@ -311,23 +329,25 @@ const PageTarjeta: NextPage = (props: Props) => {
                       </div>
                       <div className="grid grow grid-cols-1 space-x-4 pt-6 pb-4 md:grid-cols-2 md:pt-0">
                         <Button
-                          type="submit"
+                          type="button"
                           onClick={() =>
-                            values.fragmentos.push({
-                              cantidad: "1",
-                              concepto: "",
-                              monto: "1",
+                            setValues({
+                              ...values,
+                              fragmentos: [
+                                ...values.fragmentos,
+                                {
+                                  cantidad: "1",
+                                  concepto: "",
+                                  monto: "1",
+                                },
+                              ],
                             })
                           }
                         >
-                          {isSubmitting ? (
-                            <i className="bi bi-three-dots animate-pulse text-lg"></i>
-                          ) : (
-                            "Añadir fragmento"
-                          )}
+                          Añadir fragmento
                         </Button>
                         <Button
-                          type="button"
+                          type="submit"
                           primary
                           disabled={values.restante !== "0"}
                         >
@@ -372,7 +392,7 @@ const PageTarjeta: NextPage = (props: Props) => {
                 Monto
               </div>
               <div className="table-cell border-b-2 border-b-slate-800">
-                {"  "}
+                Opciones
               </div>
             </div>
           </div>
@@ -399,8 +419,17 @@ const PageTarjeta: NextPage = (props: Props) => {
                           className="bi bi-hr cursor-pointer text-blue-400 transition-all hover:text-blue-600"
                           title="Fraccionar transacción"
                           onClick={() => {
-                            setShowAgregarFragmento(true);
                             setSelectedTransaccion(transaccion);
+                            axios
+                              .get("/api/fragmento", {
+                                params: {
+                                  transaccionId: transaccion.id,
+                                },
+                              })
+                              .then((res) => {
+                                setFragmentos(res.data);
+                                setShowAgregarFragmento(true);
+                              });
                           }}
                         ></i>
                         <i

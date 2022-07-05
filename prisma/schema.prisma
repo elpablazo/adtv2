@@ -68,7 +68,7 @@ model Transaccion {
 }
 
 model Fragmento {
-  id            String      @id @default(cuid())
+  id            Int         @id @default(autoincrement())
   createdAt     DateTime    @default(now())
   cantidad      Float
   concepto      String
