@@ -412,9 +412,9 @@ const PageTarjeta: NextPage = (props: Props) => {
                   <div className="table-cell">
                     {currencyFormatter.format(transaccion.monto)}
                   </div>
-                  <div className="table-cell">
+                  <div className="table-cell justify-center text-center">
                     {transaccion.categoria !== "Creación de tarjeta" && (
-                      <div className="flex w-full">
+                      <div className="flex w-full justify-center text-center">
                         <i
                           className="bi bi-hr cursor-pointer text-blue-400 transition-all hover:text-blue-600"
                           title="Fraccionar transacción"
