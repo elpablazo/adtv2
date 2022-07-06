@@ -12,6 +12,8 @@ import Button from "$components/Button";
 import axios from "axios";
 import Radio from "$components/Radio";
 
+import { DateTime } from "luxon";
+
 type Props = {
   idTarjeta?: string;
   tarjeta?: Tarjeta | null;
@@ -25,6 +27,10 @@ const PageTarjeta: NextPage = (props: Props) => {
   const [showAgregarTransaccion, setShowAgregarTransaccion] = useState(false);
   const [transacciones, setTransacciones] = useState(props.transacciones);
   const date = new Date().toISOString().split("T")[0];
+
+  const dt = DateTime.now().setZone("UTC-4");
+
+  console.log(dt, typeof dt);
 
   const handleEliminarTransaccion = (id: string) => {
     axios
@@ -105,7 +111,9 @@ const PageTarjeta: NextPage = (props: Props) => {
                   }, 500);
                 }}
               >
-                {({ isSubmitting, errors }) => {
+                {({ isSubmitting, errors, values }) => {
+                  console.log();
+
                   return (
                     <Form className="border-rounded-lg flex w-full flex-col justify-center space-x-4 space-y-4 border-2 border-decorator py-4 px-4 text-center">
                       <h2 className="text-center text-xl text-dark">
@@ -412,9 +420,9 @@ const PageTarjeta: NextPage = (props: Props) => {
                   <div className="table-cell">
                     {currencyFormatter.format(transaccion.monto)}
                   </div>
-                  <div className="table-cell justify-center text-center">
+                  <div className="table-cellr">
                     {transaccion.categoria !== "Creación de tarjeta" && (
-                      <div className="flex w-full justify-center text-center">
+                      <div className="flex w-full justify-center space-x-2">
                         <i
                           className="bi bi-hr cursor-pointer text-blue-400 transition-all hover:text-blue-600"
                           title="Fraccionar transacción"
